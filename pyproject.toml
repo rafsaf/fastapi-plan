@@ -1,14 +1,26 @@
 [tool.poetry]
 name = "fastapi-template"
 version = "0.1.0"
-description = ""
+description = "Dead simple template manager for FastAPI applications"
+license = "MIT"
+readme = "README.rst"
+repository = "https://github.com/rafsaf/fastapi-template"
+homepage = "https://github.com/rafsaf/fastapi-template"
 authors = ["rafsaf <rafal.safin12@gmail.com>"]
-
+keywords = ["Python", "FastAPI",]
+include = [
+    "LICENSE",
+]
 [tool.poetry.dependencies]
 python = "^3.9"
+cleo = "^0.8.1"
+
+[tool.poetry.scripts]
+fastapi-template = "fastapi_template:start"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+black = "^21.5b0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
