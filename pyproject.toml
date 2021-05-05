@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fastapi-template"
+name = "fastapi-plan"
 version = "0.1.0"
 description = "Dead simple template manager for FastAPI applications"
 license = "MIT"
