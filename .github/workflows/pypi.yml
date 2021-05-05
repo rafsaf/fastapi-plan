@@ -16,9 +16,11 @@ jobs:
         with:
           virtualenvs-create: false
       - name: Install requirements
-        run: make deps
+        run: poetry install
       - name: Build dists
-        run: make build
+        run: |	
+          rm -fR dist/ 
+          poetry build
       - name: Pypi Publish
         uses: pypa/gh-action-pypi-publish@master
         with:
