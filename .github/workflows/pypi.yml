@@ -10,15 +10,15 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v1
         with:
-          python-version: '3.x'
+          python-version: "3.x"
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1.1.1
         with:
           virtualenvs-create: false
       - name: Install requirements
-        run: poetry install
+        run: poetry install --no-dev
       - name: Build dists
-        run: |	
+        run: |
           rm -fR dist/ 
           poetry build
       - name: Pypi Publish

@@ -1,24 +1,10 @@
 [tool.poetry]
-name = "fastapi-plan"
+name = "{{cookiecutter.project_name}}"
 version = "0.1.0"
-description = "Dead simple template manager for FastAPI applications"
-license = "MIT"
-readme = "README.md"
-repository = "https://github.com/rafsaf/fastapi-template"
-homepage = "https://github.com/rafsaf/fastapi-template"
-authors = ["rafsaf <rafal.safin12@gmail.com>"]
-keywords = ["Python", "FastAPI",]
-include = [
-    "LICENSE",
-]
+description = ""
+authors = ["Your Name <you@example.com>"]
+
 [tool.poetry.dependencies]
-python = "^3.9"
-cookiecutter = "^1.7.2"
-
-[tool.poetry.scripts]
-fastapi-plan = "fastapi_plan:main"
-
-[tool.poetry.dev-dependencies]
 python = "^3.9"
 fastapi = "^0.63.0"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.17.2"}
@@ -31,6 +17,8 @@ aerich = "^0.5.3"
 python-dotenv = "^0.17.1"
 python-multipart = "^0.0.5"
 requests = "^2.25.1"
+
+[tool.poetry.dev-dependencies]
 pytest = "^5.2"
 black = "^21.5b0"
 flake8 = "^3.9.1"

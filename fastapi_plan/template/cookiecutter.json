@@ -1,0 +1,4 @@
+{
+    "project_name": "Project directory name",
+    "preffered_requirements_tool": ["poetry", "requirements.txt"]
+}
