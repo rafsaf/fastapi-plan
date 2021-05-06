@@ -41,18 +41,19 @@ def test_bake_project_poetry(cookies):
     assert result.project.isdir()
     top_level = [f.basename for f in result.project.listdir()]
     assert "requirements.txt" not in top_level
-    assert top_level == [
-        ".dockerignore",
-        ".gitignore",
-        "aerich.ini",
-        "app",
-        "config",
-        "docker-compose.yml",
-        "Dockerfile",
-        "poetry.lock",
-        "pyproject.toml",
-        "pytest.ini",
-    ]
+    assert "poetry.lock" in top_level
+    assert "pyproject.toml" in top_level
+
+    # the rest
+    assert ".dockerignore" in top_level
+    assert ".env" in top_level
+    assert "aerich.ini" in top_level
+    assert "app" in top_level
+    assert "config" in top_level
+    assert "docker-compose.yml" in top_level
+    assert "Dockerfile" in top_level
+    assert "pytest.ini" in top_level
+    assert ".gitignore" in top_level
 
 
 def test_bake_project_requiremnts(cookies):
@@ -69,15 +70,17 @@ def test_bake_project_requiremnts(cookies):
     assert result.project.basename == project_name
     assert result.project.isdir()
     top_level = [f.basename for f in result.project.listdir()]
-    assert "poetry.lock" and "pyproject.toml" not in top_level
-    assert top_level == [
-        ".dockerignore",
-        ".gitignore",
-        "aerich.ini",
-        "app",
-        "config",
-        "docker-compose.yml",
-        "Dockerfile",
-        "requirements.txt",
-        "pytest.ini",
-    ]
+    assert "requirements.txt" in top_level
+    assert "poetry.lock" not in top_level
+    assert "pyproject.toml" not in top_level
+
+    # the rest
+    assert ".dockerignore" in top_level
+    assert ".env" in top_level
+    assert "aerich.ini" in top_level
+    assert "app" in top_level
+    assert "config" in top_level
+    assert "docker-compose.yml" in top_level
+    assert "Dockerfile" in top_level
+    assert "pytest.ini" in top_level
+    assert ".gitignore" in top_level
