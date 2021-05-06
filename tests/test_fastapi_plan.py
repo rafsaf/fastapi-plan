@@ -1,7 +1,7 @@
 import random
 import string
 from fastapi_plan import __version__
-
+from pathlib import Path
 
 r"""
 In the root folder
@@ -18,6 +18,10 @@ https://github.com/audreyfeldroy/cookiecutter-pypackage/blob/master/tests/test_b
 """
 
 
+ROOT_FOLDER = Path(__file__).parent.parent
+PROJECT_TEMPLATE = f"{ROOT_FOLDER}/fastapi_plan/template"
+
+
 def random_lower_string(length=20) -> str:
     return "".join(random.choices(string.ascii_lowercase, k=length))
 
@@ -29,10 +33,11 @@ def test_version():
 def test_bake_project_poetry(cookies):
     project_name = random_lower_string()
     result = cookies.bake(
+        template=PROJECT_TEMPLATE,
         extra_context={
             "project_name": project_name,
             "preffered_requirements_tool": "poetry",
-        }
+        },
     )
 
     assert result.exit_code == 0
@@ -59,10 +64,11 @@ def test_bake_project_poetry(cookies):
 def test_bake_project_requiremnts(cookies):
     project_name = random_lower_string()
     result = cookies.bake(
+        template=PROJECT_TEMPLATE,
         extra_context={
             "project_name": project_name,
             "preffered_requirements_tool": "requirements.txt",
-        }
+        },
     )
 
     assert result.exit_code == 0
