@@ -1,23 +1,38 @@
 import logging
 from pathlib import Path
 
-from cookiecutter.exceptions import FailedHookException, OutputDirExistsException
+from cookiecutter.exceptions import OutputDirExistsException
 from cookiecutter.main import cookiecutter
 
 __version__ = "0.2.0"
 TEMPLATE_DIR = Path(__file__).parent
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(name="fastapi-plan")
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s -   %(message)s")
+
+logger = logging.getLogger(
+    name="fastapi-plan",
+)
+
+# print() below for newlines
 
 
 def main():
     try:
+        print()
+        logger.warning("Enter fiew basic information about project")
+        print()
         cookiecutter(template=f"{TEMPLATE_DIR}/template")
-    except (FailedHookException, OutputDirExistsException) as exc:
-        if isinstance(exc, OutputDirExistsException):
-            logger.error("Directory with such a name already exists!")
-        return
+    except OutputDirExistsException:
+        print()
+        logger.error("FAILED")
+        logger.error("Directory with such a name already exists!")
+    except Exception as exc:
+        print()
+        logger.error("FAILED")
+        logger.error(f"{exc}")
     else:
+        print()
+        logger.info("SUCCESS")
         logger.info("Project successfully generated.")
 
 
