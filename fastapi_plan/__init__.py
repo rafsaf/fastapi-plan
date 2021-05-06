@@ -4,7 +4,6 @@ from pathlib import Path
 from cookiecutter.exceptions import OutputDirExistsException
 from cookiecutter.main import cookiecutter
 
-__version__ = "0.2.0"
 TEMPLATE_DIR = Path(__file__).parent
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s -   %(message)s")

@@ -1,6 +1,5 @@
 import random
 import string
-from fastapi_plan import __version__
 from pathlib import Path
 
 r"""
@@ -24,10 +23,6 @@ PROJECT_TEMPLATE = f"{ROOT_FOLDER}/fastapi_plan/template"
 
 def random_lower_string(length=20) -> str:
     return "".join(random.choices(string.ascii_lowercase, k=length))
-
-
-def test_version():
-    assert __version__ == "0.2.0"
 
 
 def test_bake_project_poetry(cookies):
