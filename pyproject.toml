@@ -1,18 +1,17 @@
 [tool.poetry]
 name = "fastapi-plan"
-version = "0.2.1"
+version = "0.2.2"
 description = "Dead simple template manager for FastAPI applications"
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/rafsaf/fastapi-template"
-homepage = "https://github.com/rafsaf/fastapi-template"
 authors = ["rafsaf <rafal.safin12@gmail.com>"]
 keywords = ["Python", "FastAPI",]
 include = [
     "LICENSE",
 ]
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 cookiecutter = "^1.7.2"
 
 [tool.poetry.scripts]
