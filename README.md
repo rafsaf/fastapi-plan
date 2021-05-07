@@ -3,13 +3,13 @@
 [![GitHub license](https://img.shields.io/github/license/rafsaf/fastapi-plan)](https://github.com/rafsaf/fastapi-plan/blob/master/LICENSE)
 ![PyPI](https://img.shields.io/pypi/v/fastapi-plan)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi-plan)
-![example workflow](https://github.com/rafsaf/fastapi-plan/actions/workflows/python-package.yml/badge.svg)
+![tests](https://github.com/rafsaf/fastapi-plan/actions/workflows/tests.yml/badge.svg)
 
-## about
+## About
 
 dead simple but powerful template manager for FastAPI applications.
 
-## quickstart
+## Quickstart
 
 NOTE: you will need [docker](https://www.docker.com/get-started) and optional but recommended [poetry](https://python-poetry.org/docs/) installed!
 
@@ -25,7 +25,7 @@ initialize new FastAPI project:
 fastapi-plan
 ```
 
-enter project name and other information and after noticing SUCCESS your project is ready, enter project with `cd project_name` and continue installing dependencies:
+enter project_name and other information and after project is ready, `cd project_name` and continue installing dependencies:
 
 ```bash
 poetry install
@@ -53,45 +53,43 @@ finally you can run this command to start uvicorn server
 uvicorn app.main:app --reload
 ```
 
-## short project structure
+## Short project structure
 
 ```
 |── app
-|    ├── api                                 # endpoints/dependecies
+|    ├── api                              # endpoints/dependecies
 |    |
-|    ├── core                                # settings and security algorithms
+|    ├── core                             # settings and security algorithms
 |    |
-|    ├── crud                                # CRUD operations
+|    ├── crud                             # CRUD operations
 |    |
-|    ├── migrations                          # for aerich migrations
+|    ├── migrations                       # for aerich migrations
 |    |
-|    ├── models                              # tortoise models
+|    ├── models                           # tortoise models
 |    |
-|    ├── schemas                             # pandatic schemas
+|    ├── schemas                          # pandatic schemas
 |    |
-|    ├── tests                               # tests
+|    ├── tests                            # tests
 |    |
-|    ├── initial.sh                          # initial shell script used by docker
-|    ├── initial_data.py                     # init database and add first superuser
-|    ├── main.py                             # main fastapi application file
+|    ├── initial.sh                       # initial shell script used by docker
+|    ├── initial_data.py                  # init database and add first superuser
+|    ├── main.py                          # main fastapi application file
 |
-├── config                                   # nginx server config file
+├── config                                # nginx server config file
 |
-├── .env                                     # .env file with settings
+├── .env                                  # .env file with settings
 |
-├── Dockerfile                               # dockerfile for web app
+├── Dockerfile                            # dockerfile for web app
 |
-├── aerich.ini                               # aerich (migrations) configuration
+├── aerich.ini                            # aerich (migrations) configuration
 |
-├── docker-compose.yml                       # puts it all together
+├── docker-compose.yml                    # puts it all together
 |
-├── pytest.ini                               # Pytest configurations
+├── pytest.ini                            # Pytest configurations
 |
-├── pyproject.toml                           # python dependencies (poetry)
+├── pyproject.toml                        # python dependencies (poetry)
 |
-├── poetry.lock                              # python dependencies (poetry)
+├── poetry.lock                           # python dependencies (poetry)
 |
-├── (optional) requirements.txt              # python dependencies (pip)
+├── (optional) requirements.txt           # python dependencies (pip)
 ```
-
-## why such a structure of the project
