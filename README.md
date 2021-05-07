@@ -1,5 +1,3 @@
-# Project description
-
 [![GitHub license](https://img.shields.io/github/license/rafsaf/fastapi-plan)](https://github.com/rafsaf/fastapi-plan/blob/master/LICENSE)
 ![PyPI](https://img.shields.io/pypi/v/fastapi-plan)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi-plan)
