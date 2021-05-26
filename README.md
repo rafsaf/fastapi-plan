@@ -3,9 +3,19 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi-plan)
 ![tests](https://github.com/rafsaf/fastapi-plan/actions/workflows/tests.yml/badge.svg)
 
-## About
-
 dead simple but powerful template manager for FastAPI applications.
+
+- [About](#about)
+- [Quickstart](#quickstart)
+  - [Initialization](initialization)
+  - [Development]
+  - [Debug (http)]
+  - [Production (https)]
+- [Project structure](#project-structure)
+- [High level overview](#high-level-overview)
+- [How to add new endpoint (step by step)](#how-to-add-new-endpoint)
+
+## About
 
 features:
 - postgresql database with [Tortoise ORM](https://tortoise-orm.readthedocs.io/en/latest/index.html) as ORM
