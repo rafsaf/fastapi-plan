@@ -10,7 +10,7 @@ def remove_file(filepath):
 if __name__ == "__main__":
 
     if "{{ cookiecutter.preffered_requirements_tool }}" == "poetry":
-        remove_file("requirements.txt")
+        pass
     else:
         remove_file("pyproject.toml")
         remove_file("poetry.lock")

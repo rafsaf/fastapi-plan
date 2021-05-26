@@ -1,12 +1,13 @@
 version: "3.3"
 
-# For local development, only database is running
+# For testing if project is alive on http (port 80) only!!! (without traefic)
 #
-# docker-compose up -d
-# aerich upgrade
-# python app/initial_data.py
-# uvicorn app.main:app --reload
+# docker-compose -f docker-compose.debug.yml up -d
 #
+# It should be available on HOST_NAME adress, for example
+# 1. http://localhost
+# 2. http://example.com
+# Depend on using it with your machine or VM
 
 services:
   db:
@@ -27,4 +28,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
+  web:
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - db
