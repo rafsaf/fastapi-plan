@@ -7,10 +7,10 @@ dead simple but powerful template manager for FastAPI applications.
 
 - [About](#about)
 - [Quickstart](#quickstart)
-  - [Initialization](initialization)
-  - [Development]
-  - [Debug (http)]
-  - [Production (https)]
+  - [Initialization](#0-initialization)
+  - [Development](#1-development)
+  - [Debug (http)](#2-debug-http)
+  - [Production (https)](#3-production-https-own-domain)
 - [Project structure](#project-structure)
 - [High level overview](#high-level-overview)
 - [How to add new endpoint (step by step)](#how-to-add-new-endpoint)
@@ -117,7 +117,7 @@ The diffrence between development approach is that web server automatically runs
 4. `DEFAULT_FROM_EMAIL` - your private email for ssl purposes, e.g. they will inform you shortly after some problems with you certificate.
 5. `MAIN_DOMAIN` - your own domain e.g. `example.com`
 
-Plesae also note that to get no-test certificate, you should comment line `"--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"` in `docker-compose.prod.yml` file, by default you will use test certifactes (to be sure that everything works, there are some hard limits on number of certifiactes you can ask per week! You should comment line `"--log.level=DEBUG"` also (but it can be useful when debugging traefik). There would probably be problems anyway, just be sure that everything works via http using **2. DEBUG** apropach. If it then doesn't with https, you should refer to traefik docs.
+Plesae also note that to get no-test certificate, you should comment line `"--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"` in `docker-compose.prod.yml` file, by default you will use test certifactes (to be sure that everything works, there are some hard limits on number of certifiactes you can ask per week!). You should comment line `"--log.level=DEBUG"` also (but it can be useful when debugging traefik). There would probably be problems anyway, just be sure that everything works via http using **2. DEBUG** apropach. If it then doesn't with the https, you should refer to traefik docs.
 
 ## Project structure
 
@@ -164,15 +164,15 @@ Plesae also note that to get no-test certificate, you should comment line `"--ce
 
 ## High level overview
 
-This project strucutre is mostly based on [official template](#https://github.com/tiangolo/full-stack-fastapi-postgresql) (but not only) which is really great but unfortunatly does not support Tortoise ORM and is... (too?) complicated. All the security or problematic stuff (`app/core/security.py` with `verify_password` function, login and token routes, JWT token schemas) are just copied from there, so you can be preety sure it will work as expected.
+This project strucutre is mostly based on the [official template](#https://github.com/tiangolo/full-stack-fastapi-postgresql) (but not only) which is really great but unfortunatly does not support Tortoise ORM and is... (too?) complicated. All the security or problematic stuff (`app/core/security.py` with `verify_password` function, login and token routes, JWT token schemas) are just copied from there, so you can be preety sure it will work as expected.
 
 The main thougts are:
 
-- There two sorts of settings, first one located in `.env` file for ENTIRE project, and python-specific settings which lives in `app/core/config.py`, it's based on pydantic docs (using dotenv lib). Why? Well, that's simple, this is due to [12factor methodology](https://12factor.net/), python-specific settings inheritance from `.env` file, so this is the only place where you actually change something. If you have any problems how to understand mentioned `config.py` file, just refer to [pydantic - settings management](https://pydantic-docs.helpmanual.io/usage/settings/), it's preety clear.
+- There two sorts of settings, first one located in `.env` file for the ENTIRE project, and python-specific settings which lives in `app/core/config.py`, the file is based on pydantic solution (using dotenv lib). Why? Well, that's simple, this is due to [12factor methodology](https://12factor.net/), python-specific settings inherit from `.env` file, so this is the only place where you actually change something. If you have any problems understanding mentioned `config.py` file, just refer to [pydantic - settings management](https://pydantic-docs.helpmanual.io/usage/settings/), it's preety clear.
 
 - Models, crud, schemas, api routes, tests... it might be confusing how to actually ADD SOMETHING NEW here, but after following next section (learn by doing, step by step), it should be pretty easy
 
-- Database-related stuff is very convinient, taken mostly from [Tortoise ORM](https://tortoise-orm.readthedocs.io/en/latest/index.html) docs and just *working*. There is `register_tortoise` function in `main.py`, defined `TORTOISE_ORM` variable in `app/core/config.py`. Please, be aware that if you don't run `initial_data.py` SOMEHOW (in development- you have to do it yourself, in debug/production it is handled by shell script `initial.sh`, which also runs tests and migrations). `initial_data.py` is hearbly based on the same named file in **official template** mentioned earlier. It has two responsibilities, first is running `init` function from Tortoise to initialize connection, and the second - creating first superuser (defined in `.env`) if one doesn't yet exists.
+- Database-related stuff is very convinient, taken mostly from [Tortoise ORM](https://tortoise-orm.readthedocs.io/en/latest/index.html) docs and just *working*. There is `register_tortoise` function in `main.py`, `TORTOISE_ORM` variable in `app/core/config.py`. Please, be aware that if you don't run `initial_data.py` SOMEHOW (in development- you have to do it yourself, in debug/production it is handled by shell script `initial.sh`, which also runs tests and migrations), you won't be able to connect to database. `initial_data.py` is hearbly based on the same named file in **official template** mentioned earlier. It has two responsibilities, first is running `init` function from Tortoise to initialize connection, and the second - creating first superuser (defined in `.env`) if one doesn't yet exists.
 
 - Migrations are also provided by Tortiose (the tool is aerich), docs can be found [here in aerich repo](https://github.com/tortoise/aerich). The default migration (default user model) file is already included. After changes in models (e.g. new model `Cars`), just run `aerich migrate`, `aerich upgrade` and you are good to go.
 
