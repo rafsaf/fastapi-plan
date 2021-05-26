@@ -19,7 +19,7 @@ python-multipart = "^0.0.5"
 requests = "^2.25.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^6.0"
 black = "^21.5b0"
 flake8 = "^3.9.1"
 asynctest = "^0.13.0"
@@ -27,3 +27,14 @@ asynctest = "^0.13.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = [
+    "app/tests",
+]
+log_cli = 1
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::cryptography.utils.CryptographyDeprecationWarning",
+]
