@@ -20,9 +20,9 @@ features:
 - deployment ready docker-compose.prod.yml file with poetry, you will only need own domain
 
 furthermore:
-- 1. full [project structure schema](#project-structure)
-- 2. [high level overview](#high-level-overview) how this project is organised and why, questions like where do the settings live or what every variable in `.env` file 
-- 3. step by step explanation [how to add new endpoint](#how-to-add-new-endpoint), from creating new model, adding schemas and routes to migrating database and writting tests (it's always better to have it and optionally adopt it, than wasting time trying to figure out the best dev path)
+- full [project structure schema](#project-structure)
+- [high level overview](#high-level-overview) how this project is organised and why, questions like where do the settings live or what every variable in `.env` file 
+- step by step explanation [how to add new endpoint](#how-to-add-new-endpoint), from creating new model, adding schemas and routes to migrating database and writting tests (it's always better to have it and optionally adopt it, than wasting time trying to figure out the best dev path)
 
 
 ## Quickstart
