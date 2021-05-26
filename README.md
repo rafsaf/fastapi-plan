@@ -9,9 +9,9 @@ dead simple but powerful template manager for FastAPI applications.
 
 features:
 - postgresql database with [Tortoise ORM](https://tortoise-orm.readthedocs.io/en/latest/index.html) as ORM
-- well organised, rock solid project structure (see section [Project structure](#project-structure)
+- well organised, rock solid project structure (see section [Project structure](#project-structure))
 - ready-to-use user model, authentiaction system (JWT), hashing with Bcrypt
-- easy to undarstand config.py with settings (there is only one file for changes: `.env`
+- easy to undarstand config.py with settings (there is only one file for changes: `.env`)
 - out-of-the-box well-tested routes for login and user (register, read, read_me, update etc.)
 - aerich for migrations
 - well-designed tests folder filled with tests for existing user model/user endpoints
