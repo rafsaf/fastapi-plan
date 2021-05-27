@@ -1,6 +1,4 @@
-from app.schemas.user import UserPydantic
 from datetime import timedelta
-from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
@@ -15,7 +13,7 @@ router = APIRouter()
 
 
 @router.post("/access-token", response_model=schemas.Token)
-async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
+async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     """
     OAuth2 compatible token login, get an access token for future requests
     """
@@ -37,8 +35,8 @@ async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()) -
 
 
 @router.post("/test-token", response_model=schemas.UserPydantic)
-async def test_token(current_user: models.User = Depends(deps.get_current_user)) -> Any:
+async def test_token(current_user: models.User = Depends(deps.get_current_user)):
     """
     Test access token
     """
-    return UserPydantic.from_orm(current_user)
+    return await schemas.UserPydantic.from_tortoise_orm(current_user)
