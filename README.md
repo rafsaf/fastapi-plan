@@ -213,6 +213,7 @@ aerich upgrade
 
 ```python
 from typing import Optional
+from tortoise import Tortoise
 from tortoise.contrib.pydantic.creator import (
     pydantic_model_creator,
     pydantic_queryset_creator,
@@ -220,11 +221,13 @@ from tortoise.contrib.pydantic.creator import (
 from pydantic import BaseModel
 from app.models import Dog
 
+
 # Pydantic models from Tortoise models, pls refer
 # https://tortoise-orm.readthedocs.io/en/latest/examples/pydantic.html#basic-pydantic
 
-DogPydantic = pydantic_model_creator(Dog)
-DogPydanticList = pydantic_queryset_creator(Dog)
+Tortoise.init_models(["app.models"], "models")
+DogPydantic = pydantic_model_creator(Dog, exclude=("owner",))
+DogPydanticList = pydantic_queryset_creator(Dog, exclude=("owner",))
 
 # Unfortunately, it doesn't work the other way around
 
@@ -233,13 +236,13 @@ class DogCreate(BaseModel):
     name: str
     age: Optional[int]
     breed: Optional[str]
-    user_id: int
 
 
 class DogUpdate(BaseModel):
     name: Optional[str]
     age: Optional[int]
     breed: Optional[str]
+
 ```
 
 5. Add import in `app/schemas.__init__.py`:
@@ -257,12 +260,24 @@ from app.models import Dog, User
 
 
 class CRUDDog(CRUDBase[Dog, DogCreate, DogUpdate]):
-    async def get_dogs_by_user(self, user: User, skip: int = 0, limit: int = 100):
-        return await Dog.filter(owner=user).offset(offset=skip).limit(limit=limit)
+    def get_dogs_by_user(self, user: User, skip: int = 0, limit: int = 100):
+        return Dog.filter(owner=user).offset(offset=skip).limit(limit=limit)
+
+    async def create_dog_me(self, dog_in: DogCreate, user: User):
+        new_dog = await Dog.create(
+            name=dog_in.name, age=dog_in.age, breed=dog_in.breed, owner=user
+        )
+        return new_dog
+
+    async def get_by_id_and_user(self, dog_id: int, user: User):
+        return await Dog.get(id=dog_id, owner=user)
 
     async def remove_all_user_dogs(self, user: User):
         await Dog.filter(owner=user).delete()
         return
+
+
+dog = CRUDDog(Dog)
 
 ```
 
@@ -276,5 +291,110 @@ from .crud_dog import dog # type: ignore
 8. Create `dogs.py` with endpoints in `app/api/routers` folder
 
 ```python
+from typing import Any, List
+from fastapi import APIRouter, Depends, HTTPException
+from app import crud, models, schemas
+from app.api import deps
+from app.models import Dog
+
+router = APIRouter()
+
+
+@router.get("/", response_model=schemas.DogPydantic)
+async def read_dog(
+    dog_id: int,
+):
+    dog = await crud.dog.get(dog_id)
+    if not dog:
+        raise HTTPException(
+            status_code=404,
+            detail="The dog does not exist in the system",
+        )
+    return await schemas.DogPydantic.from_tortoise_orm(dog)
+
+
+@router.post("/", response_model=schemas.DogPydantic)
+async def create_dog_me(
+    dog_in: schemas.DogCreate,
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    dog: Dog = await crud.dog.create_dog_me(dog_in, current_user)
+    return await schemas.DogPydantic.from_tortoise_orm(dog)
+
+
+@router.put("/", response_model=schemas.DogPydantic)
+async def update_dog_me(
+    dog_id: int,
+    dog_in: schemas.DogUpdate,
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    dog = await crud.dog.get_by_id_and_user(dog_id, current_user)
+    if not dog:
+        raise HTTPException(
+            status_code=404,
+            detail="The dog does not exist in the system",
+        )
+    new_dog = await crud.dog.update(dog, dog_in)
+    return await schemas.DogPydantic.from_tortoise_orm(new_dog)
+
+
+@router.delete("/", response_model=None)
+async def delete_dog_me(
+    dog_id: int,
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    dog = await crud.dog.get_by_id_and_user(dog_id, current_user)
+    if not dog:
+        raise HTTPException(
+            status_code=404,
+            detail="The dog does not exist in the system",
+        )
+    await crud.dog.remove(dog_id)
+    return None
+
+
+@router.delete("/all", response_model=None)
+async def delete_dogs_me(
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    await crud.dog.remove_all_user_dogs(current_user)
+    return None
+
+
+@router.get("/all", response_model=schemas.DogPydanticList)
+async def read_all_dogs_me(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    dogs = crud.dog.get_dogs_by_user(current_user, skip, limit)
+    return await schemas.DogPydanticList.from_queryset(dogs)
+
+
+@router.get("/all/{user_id}", response_model=schemas.DogPydanticList)
+async def read_all_dogs(
+    user_id: int,
+    skip: int = 0,
+    limit: int = 100,
+):
+    user = await crud.user.get(user_id)
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="The user does not exist",
+        )
+    dogs = crud.dog.get_dogs_by_user(user, skip, limit)
+
+    return await schemas.DogPydanticList.from_queryset(dogs)
 
 ```
+
+9. Finally add those enpoints to the app with label "dogs", add this line in `app/api/api.py` file:
+
+```python
+api_router.include_router(dogs.router, prefix="/dogs", tags=["dogs"])
+```
+
+10. API endpoints are ready to go, you can play with them at `localhost:8000` by default
+
+11. Create tests
