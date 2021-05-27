@@ -179,3 +179,102 @@ The main thougts are:
 - All tests lives in `tests` folder, with some pytest-specific content included. If you feel unconfortable with pytest, feel free to read articles about using it, and if you just want to see how to test new enpoints/models, just read next section.
 
 ## How to add new endpoint
+
+Let's imagine we need to create API for a website where users brag about their dogs... or whatever, they just can crud dogs in user panel for some reason. We will add dummy model `Dog` to our API, with relation to the default table `User` and crud auth endpoints, then test it shortly.
+
+1. Create file `dog.py` in `app/models` folder:
+
+```python
+from tortoise import fields
+from tortoise.models import Model
+
+
+class Dog(Model):
+    name = fields.CharField(max_length=100)
+    age = fields.IntField(null=True, default=None)
+    breed = fields.CharField(max_length=100, null=True, default=None)
+    owner = fields.ForeignKeyField("models.User", related_name="dogs")
+```
+
+2. Add import in `app/models.__init__.py`:
+
+```python
+from .dog import Dog # type: ignore
+```
+
+3. Migrate changes
+
+```bash
+aerich migrate
+aerich upgrade
+```
+
+4. Create file `dog.py` in `app/schemas` folder (pydantic schemas with typing support):
+
+```python
+from typing import Optional
+from tortoise.contrib.pydantic.creator import (
+    pydantic_model_creator,
+    pydantic_queryset_creator,
+)
+from pydantic import BaseModel
+from app.models import Dog
+
+# Pydantic models from Tortoise models, pls refer
+# https://tortoise-orm.readthedocs.io/en/latest/examples/pydantic.html#basic-pydantic
+
+DogPydantic = pydantic_model_creator(Dog)
+DogPydanticList = pydantic_queryset_creator(Dog)
+
+# Unfortunately, it doesn't work the other way around
+
+
+class DogCreate(BaseModel):
+    name: str
+    age: Optional[int]
+    breed: Optional[str]
+    user_id: int
+
+
+class DogUpdate(BaseModel):
+    name: Optional[str]
+    age: Optional[int]
+    breed: Optional[str]
+```
+
+5. Add import in `app/schemas.__init__.py`:
+
+```python
+from .dog import DogUpdate, DogCreate, DogPydantic, DogPydanticList # type: ignore
+```
+
+6. Create `crud_dog.py` in `app/crud` folder
+
+```python
+from app.schemas import DogCreate, DogUpdate
+from app.crud.base import CRUDBase
+from app.models import Dog, User
+
+
+class CRUDDog(CRUDBase[Dog, DogCreate, DogUpdate]):
+    async def get_dogs_by_user(self, user: User, skip: int = 0, limit: int = 100):
+        return await Dog.filter(owner=user).offset(offset=skip).limit(limit=limit)
+
+    async def remove_all_user_dogs(self, user: User):
+        await Dog.filter(owner=user).delete()
+        return
+
+```
+
+7. Add import in `app/crud.__init__.py`:
+
+```python
+from .crud_dog import dog # type: ignore
+```
+
+
+8. Create `dogs.py` with endpoints in `app/api/routers` folder
+
+```python
+
+```
