@@ -8,6 +8,10 @@ from fastapi.testclient import TestClient
 from app.schemas import UserCreateBySuperuser
 
 
+def random_integer_below_100() -> int:
+    return random.randint(0, 99)
+
+
 def random_lower_string(length=20) -> str:
     return "".join(random.choices(string.ascii_lowercase, k=length))
 
