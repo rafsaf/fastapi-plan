@@ -397,4 +397,104 @@ api_router.include_router(dogs.router, prefix="/dogs", tags=["dogs"])
 
 10. API endpoints are ready to go, you can play with them at `localhost:8000` by default
 
-11. Create tests
+11. Now we gonna create tests for crud and endpoints, let's first create utils for dog model (we can use it in multiple places in tests then), add `dog.py` in `app/tests/utils` folder:
+
+```python
+from asyncio import AbstractEventLoop as EventLoop
+from app import models
+import app.tests.utils.utils as utils
+
+
+def create_random_dog(user: models.User, event_loop: EventLoop) -> models.Dog:
+    name = utils.random_lower_string()
+    breed = utils.random_lower_string()
+    age = utils.random_integer_below_100()
+    dog: models.Dog = event_loop.run_until_complete(
+        models.Dog.create(name=name, breed=breed, age=age, owner=user)
+    )
+    return dog
+```
+
+12. Then add `test_dog.py` in `app/tests/crud` folder:
+
+```python
+import pytest
+from asyncio import AbstractEventLoop as EventLoop
+from typing import List
+from app import crud, models, schemas
+from app.tests.utils.utils import (
+    random_lower_string,
+    random_integer_below_100,
+)
+from app.tests.utils.dog import create_random_dog
+
+
+@pytest.fixture(autouse=True)
+def drop_dogs(event_loop: EventLoop) -> None:
+    yield
+    event_loop.run_until_complete(models.Dog.all().delete())
+
+
+def test_get_dogs_by_user(event_loop: EventLoop, normal_user: models.User):
+
+    dog0 = create_random_dog(normal_user, event_loop)
+    dog1 = create_random_dog(normal_user, event_loop)
+    dog_lst: List[models.Dog] = list(
+        event_loop.run_until_complete(crud.dog.get_dogs_by_user(normal_user))
+    )
+
+    assert len(dog_lst) == 2
+    assert dog_lst[0].name == dog0.name
+    assert dog_lst[1].name == dog1.name
+    assert dog_lst[0].age == dog0.age
+    assert dog_lst[1].age == dog1.age
+    assert dog_lst[0].breed == dog0.breed
+    assert dog_lst[1].breed == dog1.breed
+
+
+def test_create_dog_me(event_loop: EventLoop, normal_user: models.User):
+    name = random_lower_string()
+    breed = random_lower_string()
+    age = random_integer_below_100()
+    dog_in = schemas.DogCreate(name=name, breed=breed, age=age)
+    dog: models.Dog = event_loop.run_until_complete(
+        crud.dog.create_dog_me(dog_in, normal_user)
+    )
+
+    assert dog.name == name
+    assert dog.breed == breed
+    assert dog.age == age
+    assert dog.owner == normal_user
+
+
+def test_get_dog_by_user(event_loop: EventLoop, normal_user: models.User):
+
+    dog0 = create_random_dog(normal_user, event_loop)
+
+    dog: models.Dog = event_loop.run_until_complete(
+        crud.dog.get_by_id_and_user(dog0.pk, normal_user)
+    )
+    assert dog == dog0
+
+
+def test_remove_all_user_dogs(event_loop: EventLoop, normal_user: models.User):
+
+    create_random_dog(normal_user, event_loop)
+    create_random_dog(normal_user, event_loop)
+    dog_number0: int = event_loop.run_until_complete(
+        models.Dog.filter(owner=normal_user).count()
+    )
+    assert dog_number0 == 2
+    event_loop.run_until_complete(crud.dog.remove_all_user_dogs(normal_user))
+    dog_number1: int = event_loop.run_until_complete(
+        models.Dog.filter(owner=normal_user).count()
+    )
+    assert dog_number1 == 0
+```
+
+13. And then `test_dogs.py` for endpoints in `app/tests/api` folder:
+
+```python
+
+```
+
