@@ -291,8 +291,7 @@ from .crud_dog import dog # type: ignore
 8. Create `dogs.py` with endpoints in `app/api/routers` folder
 
 ```python
-from typing import Any, List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from app import crud, models, schemas
 from app.api import deps
 from app.models import Dog
@@ -300,20 +299,22 @@ from app.models import Dog
 router = APIRouter()
 
 
-@router.get("/", response_model=schemas.DogPydantic)
+@router.get("/{dog_id}", response_model=schemas.DogPydantic)
 async def read_dog(
     dog_id: int,
 ):
     dog = await crud.dog.get(dog_id)
     if not dog:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="The dog does not exist in the system",
         )
     return await schemas.DogPydantic.from_tortoise_orm(dog)
 
 
-@router.post("/", response_model=schemas.DogPydantic)
+@router.post(
+    "/", response_model=schemas.DogPydantic, status_code=status.HTTP_201_CREATED
+)
 async def create_dog_me(
     dog_in: schemas.DogCreate,
     current_user: models.User = Depends(deps.get_current_active_user),
@@ -331,14 +332,14 @@ async def update_dog_me(
     dog = await crud.dog.get_by_id_and_user(dog_id, current_user)
     if not dog:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="The dog does not exist in the system",
         )
     new_dog = await crud.dog.update(dog, dog_in)
     return await schemas.DogPydantic.from_tortoise_orm(new_dog)
 
 
-@router.delete("/", response_model=None)
+@router.delete("/", response_model=None, status_code=status.HTTP_204_NO_CONTENT)
 async def delete_dog_me(
     dog_id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
@@ -346,14 +347,14 @@ async def delete_dog_me(
     dog = await crud.dog.get_by_id_and_user(dog_id, current_user)
     if not dog:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="The dog does not exist in the system",
         )
     await crud.dog.remove(dog_id)
     return None
 
 
-@router.delete("/all", response_model=None)
+@router.delete("/all", response_model=None, status_code=status.HTTP_204_NO_CONTENT)
 async def delete_dogs_me(
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
@@ -380,7 +381,7 @@ async def read_all_dogs(
     user = await crud.user.get(user_id)
     if not user:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="The user does not exist",
         )
     dogs = crud.dog.get_dogs_by_user(user, skip, limit)
@@ -492,9 +493,5 @@ def test_remove_all_user_dogs(event_loop: EventLoop, normal_user: models.User):
     assert dog_number1 == 0
 ```
 
-13. And then `test_dogs.py` for endpoints in `app/tests/api` folder:
-
-```python
-
-```
+13. And then `test_dogs.py` for endpoints in `app/tests/api` folder
 
