@@ -1,9 +1,10 @@
 from typing import Optional
 
+from tortoise.exceptions import DoesNotExist
+
+from app import models, schemas
 from app.core.security import get_password_hash, verify_password
 from app.crud.base import CRUDBase
-from app import models, schemas
-from tortoise.exceptions import DoesNotExist
 
 
 class CRUDUser(CRUDBase[models.User, schemas.UserCreateMe, schemas.UserUpdateMe]):

@@ -1,4 +1,7 @@
 {
     "python.formatting.provider": "black",
-    "python.analysis.extraPaths": ["./fastapi_plan/template/{{cookiecutter.project_name}}"]
+    "python.analysis.extraPaths": [
+        "./fastapi_plan/template/{{cookiecutter.project_name}}"
+    ],
+    "python.pythonPath": ".venv\\Scripts\\python.exe"
 }

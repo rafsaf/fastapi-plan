@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "fastapi-plan"
-version = "0.3.1"
+version = "0.3.2"
 description = "Dead simple template manager for FastAPI applications"
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/rafsaf/fastapi-template"
-authors = ["rafsaf <rafal.safin12@gmail.com>"]
+authors = ["rafsaf <rafal.safin@rafsaf.pl>"]
 keywords = ["Python", "FastAPI",]
 include = [
     "LICENSE",
@@ -18,7 +18,7 @@ cookiecutter = "^1.7.2"
 fastapi-plan = "fastapi_plan:main"
 
 [tool.poetry.dev-dependencies]
-fastapi = "^0.63.0"
+fastapi = "^0.65.2"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.17.2"}
 python-jose = {extras = ["cryptography"], version = "^3.2.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}

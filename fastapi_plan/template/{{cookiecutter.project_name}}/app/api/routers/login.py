@@ -8,7 +8,6 @@ from app.api import deps
 from app.core import security
 from app.core.config import settings
 
-
 router = APIRouter()
 
 

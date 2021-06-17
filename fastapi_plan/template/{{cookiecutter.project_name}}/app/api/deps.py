@@ -7,7 +7,6 @@ from app import crud, models, schemas
 from app.core import security
 from app.core.config import settings
 
-
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_STR}/login/access-token"
 )

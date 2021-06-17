@@ -1,4 +1,4 @@
-from app.schemas import UserCreateMe, UserCreateBySuperuser
+from app.schemas import UserCreateBySuperuser, UserCreateMe
 from app.tests.utils.utils import random_email, random_lower_string
 
 

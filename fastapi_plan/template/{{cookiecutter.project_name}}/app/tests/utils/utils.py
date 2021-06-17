@@ -1,10 +1,12 @@
-from app.core.config import settings
 import random
 import string
 from asyncio import AbstractEventLoop as EventLoop
 from typing import Dict
-from app import crud
+
 from fastapi.testclient import TestClient
+
+from app import crud
+from app.core.config import settings
 from app.schemas import UserCreateBySuperuser
 
 

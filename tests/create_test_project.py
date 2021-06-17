@@ -2,6 +2,7 @@
 Creates template project in current folder with default values
 """
 from pathlib import Path
+
 from cookiecutter.main import cookiecutter
 
 ROOT_FOLDER = Path(__file__).parent.parent

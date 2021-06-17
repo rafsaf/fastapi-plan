@@ -1,20 +1,20 @@
 import logging
-from tortoise import run_async
-from tenacity import retry, after_log, before_log, retry, wait_fixed, stop_after_attempt
-from tortoise import Tortoise
+
+from tenacity import (after_log, before_log, retry, stop_after_attempt,
+                      wait_fixed)
+from tortoise import Tortoise, run_async
 
 try:
     import app
 except ModuleNotFoundError:
-    import sys
     import os
     import pathlib
+    import sys
 
     app = pathlib.Path(os.path.dirname(__file__)).parent
     sys.path.append(str(app))
     from app import crud, schemas
-    from app.core.config import settings
-    from app.core.config import TORTOISE_ORM
+    from app.core.config import TORTOISE_ORM, settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
