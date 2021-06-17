@@ -1,9 +1,10 @@
 from typing import Any, Dict, Generic, Optional, Type, TypeVar, Union
-from tortoise.models import Model
+
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from tortoise.queryset import QuerySet
 from tortoise.exceptions import DoesNotExist
+from tortoise.models import Model
+from tortoise.queryset import QuerySet
 
 ModelType = TypeVar("ModelType", bound=Model)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)

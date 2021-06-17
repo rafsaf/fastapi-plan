@@ -1,8 +1,10 @@
-from typing import Dict
-from fastapi.testclient import TestClient
-from app.tests.conftest import default_user, default_superuser
 from asyncio import AbstractEventLoop as EventLoop
+from typing import Dict
+
+from fastapi.testclient import TestClient
+
 from app.core.config import settings
+from app.tests.conftest import default_superuser, default_user
 
 
 def test_get_access_token(

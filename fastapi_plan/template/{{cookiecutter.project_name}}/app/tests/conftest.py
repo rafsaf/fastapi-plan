@@ -1,10 +1,12 @@
-import pytest
 from asyncio import AbstractEventLoop as EventLoop
 from typing import Generator
+
+import pytest
 from fastapi.testclient import TestClient
 from tortoise.contrib.test import finalizer, initializer
+
+from app import crud, models, schemas
 from app.main import create_app
-from app import models, schemas, crud
 from app.tests.utils.utils import user_authentication_headers
 
 app = create_app()

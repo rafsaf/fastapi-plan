@@ -1,4 +1,5 @@
 from typing import Optional
+
 import tortoise.fields.data as fields
 from tortoise.models import Model
 

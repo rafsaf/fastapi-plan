@@ -1,6 +1,7 @@
-from typing import Dict, List, Optional, Union
-from pydantic import AnyHttpUrl, BaseSettings, AnyUrl, validator, EmailStr
 from pathlib import Path
+from typing import Dict, List, Optional, Union
+
+from pydantic import AnyHttpUrl, AnyUrl, BaseSettings, EmailStr, validator
 
 PROJECT_DIR = Path(__file__).parent.parent.parent
 

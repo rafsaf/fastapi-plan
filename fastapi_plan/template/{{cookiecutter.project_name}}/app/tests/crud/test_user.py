@@ -1,14 +1,15 @@
-import pytest
-from app.schemas.user import UserUpdateBySuperuser, UserUpdateMe
-from asyncio import AbstractEventLoop as EventLoop
-from fastapi.testclient import TestClient
-from app.models import User
-from app import crud
-from app.schemas import UserCreateMe, UserCreateBySuperuser
-from app.tests.utils.utils import random_email, random_lower_string
-from app.core.security import verify_password
 import logging
+from asyncio import AbstractEventLoop as EventLoop
 
+import pytest
+from fastapi.testclient import TestClient
+
+from app import crud
+from app.core.security import verify_password
+from app.models import User
+from app.schemas import UserCreateBySuperuser, UserCreateMe
+from app.schemas.user import UserUpdateBySuperuser, UserUpdateMe
+from app.tests.utils.utils import random_email, random_lower_string
 
 logger = logging.getLogger(__name__)
 

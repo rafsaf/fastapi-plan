@@ -1,9 +1,9 @@
 from .token import Token, TokenPayload  # noqa
 from .user import (
+    UserCreateBySuperuser,
+    UserCreateMe,
     UserPydantic,
     UserPydanticList,
-    UserCreateMe,
-    UserCreateBySuperuser,
     UserUpdateBySuperuser,
     UserUpdateMe,
 )

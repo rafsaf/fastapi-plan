@@ -1,11 +1,13 @@
-from app import crud
-from typing import Dict
-from app.tests.conftest import default_user, default_superuser
-from app.core.config import settings
 from asyncio import AbstractEventLoop as EventLoop
+from typing import Dict
+
 from fastapi.testclient import TestClient
+
+from app import crud
+from app.core.config import settings
+from app.tests.conftest import default_superuser, default_user
+from app.tests.utils.user import get_random_user_by_superuser, get_random_user_me
 from app.tests.utils.utils import random_lower_string
-from app.tests.utils.user import get_random_user_me, get_random_user_by_superuser
 
 
 def test_read_users_superuser(

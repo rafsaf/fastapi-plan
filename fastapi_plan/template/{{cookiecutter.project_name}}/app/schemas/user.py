@@ -1,9 +1,11 @@
 from typing import Optional
+
+from pydantic import BaseModel, EmailStr
 from tortoise.contrib.pydantic.creator import (
     pydantic_model_creator,
     pydantic_queryset_creator,
 )
-from pydantic import BaseModel, EmailStr
+
 from app.models import User
 
 UserPydantic = pydantic_model_creator(User)
